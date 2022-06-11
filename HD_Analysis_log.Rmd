@@ -1,0 +1,59 @@
+---
+title: "Heart Disease Analysis"
+author: Oscar Monroy & Santiago Rodriguez
+output: pdf_document
+---
+#Logistic  Regression
+=====================
+
+Let's load our data and count the duplicated responses. Note the survey responses
+were not given a unique identifier, which leads to a lot of duplicate entries.
+```{r}
+hd <- read.csv("heart_2020_cleaned.csv")
+attach(hd)
+
+summary(hd)
+sum(duplicated(hd))
+```
+
+For some reason the 'Yes' and 'No' replies in the data were not being understood 
+very well  by R, so we converted $HeartDisease$ into a binary vector.
+```{r}
+library(dplyr)
+hd2 <- hd %>% mutate(HeartDisease = ifelse(HeartDisease == 'Yes', 1, 0))
+y <- hd2$HeartDisease
+```
+
+Now let's break up the data into training and test sets. Here we used 60% of 
+the data as our training set.
+```{r}
+set.seed(1)
+
+# Create training and test sets.
+train <- sample(1:nrow(hd2), 0.6*nrow(hd2))
+test <- (-train)
+
+y.test <- y[test]
+```
+
+Now we apply Logistic Regression to the training set and then attempt to predict
+the individuals with heart disease. We use every other variable as a predictor.
+
+```{r}
+
+#Apply logistic regression to training set.
+model = glm(HeartDisease ~ ., data = hd2[train, ], family = binomial)
+summary(model)
+
+# Predict the responders that are diagnosed with heart disease.
+model.pred = predict(model, data = hd2[test, ], type = 'response')
+vec = rep(0, length(y))
+vec[model.pred >= 0.5] = 1
+```
+Now let's check how well Logistic Regression predicted  $HeartDisease$
+```{r}
+mean(vec == y)
+prop.table(table(vec, y))
+```
+Notice that our model did very poorly at detecting which individuals said they
+had heart disease at some point.
