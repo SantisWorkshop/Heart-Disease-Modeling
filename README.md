@@ -12,4 +12,4 @@ We did find that our models were able to predict whether someone DIDN'T have hea
 for those that do. Even observing the other models people have done on the Kaggle page, we see that this model was never going to give us
 a fair prediction rate for those that do have heart disease. Our project remains inconclusive for now.
 
-Credits for this project: Oscar Monroy https://github.com/omonroy20(hd_analysis_rf; random forest model), Santiago Rodriguez (hd_analysis_log; logistic regression model)
+Credits for this project: Oscar Monroy https://github.com/omonroy20 (hd_analysis_rf; random forest model), Santiago Rodriguez (hd_analysis_log; logistic regression model)
